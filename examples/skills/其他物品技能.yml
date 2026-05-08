@@ -1,0 +1,34 @@
+shit_eat:
+  Skills:
+  - message{m="&2天呐...你把💩吞了下去...";cooldown=8}
+  - feed{amount=-1.1;saturation=1;overfeed=true} ~onConsume @self
+  - potion{type=POISON;duration=80;level=1} ~onConsume @self
+  - potion{type=NAUSEA;duration=120;level=1} ~onConsume @self
+  - potion{type=DARKNESS;duration=120;level=1} ~onConsume @self
+  - effect:particles{p=slime;amount=15;speed=0.2;y=1;repeat=10;repeati=5} ~onConsume @self
+
+shit_launch:
+  Skills:
+  - take{i=eatable_shit} @self
+  - effect:sound{s=entity.snowball.throw} @self
+  - projectile{bullettype=ITEM;bulletmaterial=eatable_shit;onhitskill=shit_on_hit;ontickskill=shit_on_tick;onhitblockskill=shit_on_hit_block;velocity=20}
+
+shit_on_tick:
+  Skills:
+  - effect:particles{p=block_crack;m=dirt;amount=2} @origin
+  - effect:particles{p=slime;amount=1} @origin
+
+shit_on_hit:
+  Skills:
+  - sound{s=minecraft:block.slime_block.step}
+  - message{m="&e一坨💩砸到了你的脸上！";cooldown=8}
+  - sound{s=entity.player.burp}
+  - feed{amount=0;saturation=1;overfeed=true}
+  - potion{type=NAUSEA;duration=80;level=1}
+  - itemspray{item=eatable_shit;amount=4;d=80}
+
+shit_on_hit_block:
+  Skills:
+  - sound{s=minecraft:block.slime_block.step}
+  - itemspray{item=eatable_shit;amount=6;d=50;force=0.5}
+  - effect:blockmask{m=brown_concrete_powder;r=2;noise=0.5;duration=50}

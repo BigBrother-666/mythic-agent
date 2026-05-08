@@ -1,0 +1,68 @@
+shit_C4启动:
+  Cooldown: 40
+  Skills:
+  - setname{name=&4激活的&6装填💩的&4C4炸弹} @self
+  - sound{sound=minecraft:block.note_block.bit;p=1.5;repeat=9;repeati=20;v=5} @Self
+  - delay 200
+  - sound{sound=minecraft:block.note_block.bit;p=1.5;repeat=19;repeati=10;v=5} @self
+  - delay 200
+  - sound{sound=minecraft:block.note_block.bit;p=1.5;repeat=39;repeati=5;v=5} @self
+  - delay 200
+  - sound{sound=minecraft:block.note_block.bit;p=2;repeat=19;repeati=2;v=5} @self
+  - delay 40
+  - particles{p=Explosion_Emitter;vs=3;hs=3;amount=30;repeat=6;repeati=4} @self
+  - sound{sound=minecraft:entity.generic.explode;v=5;repeat=5;repeati=5} @self
+  - particles{p=Campfire_Cosy_Smoke;a=100;hs=4;vs=4} @self
+
+  - effect:blockmask{m=brown_concrete_powder;r=20;noise=0.6;duration=80}
+  - blockwave{duration=60;radius=10;radiusY=15;velocity=3;shape=sphere;hs=false}
+  - itemspray{item=eatable_shit;amount=30;d=80;force=3.0;yoffset=4;yforce=4}
+  - itemspray{item=eatable_shit;amount=60;d=80;force=4.0;yoffset=4;yforce=4}
+  - itemspray{item=eatable_shit;amount=100;d=100;force=5.5;yoffset=4;yforce=4}
+
+  - damage{amount=80} @EIR{r=12;ignore=players,animals,self}
+  - potion{type=NAUSEA;duration=80;level=1} @EIR{r=12}
+  - throw{v=50;vy=50} @EIR{r=5;ignore=npc,animals,villager}
+  - delay 0
+  - remove @self
+
+
+# -------------------------------------------------------------------------------------
+
+跟踪导弹_发射:
+  Skills:
+  - missile{bullettype=DISPLAY;bulletmaterial=TNT;bulletscale=0.8,0.8,5;os=跟踪导弹_LAUNCH;ot=跟踪导弹_TICK;oh=跟踪导弹_HIT;v=<random.float.37to47>;i=1;hR=1;vR=1;in=0.75;mr=300}
+  TargetConditions:
+  - gliding true 
+
+跟踪导弹_LAUNCH:
+  Skills:
+  - sound{s=entity.wither.shoot;v=0.8;p=0.8;radius=100}
+
+跟踪导弹_TICK:
+  Skills:
+  - sound{s=entity.blaze.burn;v=0.5;p=1} @origin
+  - effect:particles{p=flame;amount=10;hs=0.3;vs=0.6;y=0;} @origin
+  - effect:particles{p=smoke_large;amount=2;y=0;} @origin
+
+跟踪导弹_HIT:
+  Skills:
+  - effect:particles{p=lava;a=100;hS=2;vS=2}
+  - effect:particles{p=Explosion_Emitter;a=6;hs=4;vs=2}
+  - effect:sound{s=entity.generic.explode;v=1;p=0}
+  - damage{a=40;i=false}
+
+跟踪导弹_音效1:
+  Cooldown: 5
+  Skills:
+  - sound{s=man_what_can_i_say;radius=100;soundcategory=VOICE}
+
+跟踪导弹_音效2:
+  Cooldown: 5
+  Skills:
+  - sound{s=see_you_again_1;radius=100;soundcategory=VOICE}
+  
+跟踪导弹_音效3:
+  Cooldown: 5
+  Skills:
+  - sound{s=see_you_again_2;radius=100;soundcategory=VOICE}

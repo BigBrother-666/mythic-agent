@@ -1,0 +1,65 @@
+MiniPlayerBase:
+  Mobtype: COW
+  Health: 2000
+  Armor: 500
+  Damage: 10
+  Options:
+    Despawn: NORMAL
+    MovementSpeed: 0.35
+    AlwaysShowName: true
+    PreventMobKillDrops: true
+    PreventOtherDrops: true
+    PreventTransformation: true
+    Silent: true
+    FollowRange: 32
+    KnockbackResistance: 0.9
+  AIGoalSelectors:
+  - clear
+  - meleeattack
+  - randomstroll
+  - lookatplayers
+  - randomlookaround
+  - float
+  - GoToOwner{fr=10;mr=3;dt=false}
+  AITargetSelectors:
+  - clear
+  - monsters
+  # - players
+  Skills:
+  - setvariable{var=target.miniflag;type=STRING;value="mini"} @self ~onSpawn
+
+MiniSasa:
+  Template: MiniPlayerBase
+  Display: "MiniSasa"
+  Modules:
+    ThreatTable: true
+  Skills:
+  - model{mid=nm_mini_you_1;usm=true} @self ~onSpawn
+  - skill{skill=Lightning} @EntitiesInRadius{r=10;target=monsters} ~onAttack ?livinginradius{amount=>5;radius=5}
+  - skill{skill=ImmuneLighting} @self ~onDamaged
+  - skill{skill=LightingAttack} @Target ~onAttack
+  - skill{skill=Rush} @Target ~onDamaged
+
+MiniJieZ:
+  Template: MiniPlayerBase
+  Display: ""
+  Skills:
+  - model{mid=nm_mini_you_2;usm=true} @self ~onSpawn
+
+MiniMutuan:
+  Template: MiniPlayerBase
+  Display: ""
+  Skills:
+  - model{mid=nm_mini_you_3;usm=true} @self ~onSpawn
+
+MiniRLS:
+  Template: MiniPlayerBase
+  Display: "Little_LittleSister"
+  Modules:
+    ThreatTable: true
+  Skills:
+  - model{mid=nm_mini_you_4;usm=true} @self ~onSpawn
+  - skill{skill=AerialCombo} @Target ~onAttack
+  - skill{skill=GroundExplosion} @EntitiesInRadius{r=8;target=monsters,players} ~onDamaged
+  - skill{skill=NormalCombo} @Target ~onAttack
+  - skill{skill=Rush} @Target ~onTimer:100

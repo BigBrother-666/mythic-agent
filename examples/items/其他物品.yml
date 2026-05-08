@@ -1,0 +1,58 @@
+MiniPlayer召唤棒:
+  Id: blaze_rod
+  Display: '&d召唤棒'
+  Skills:
+  - skill{s=MiniSelect} @self ~onLeftclick ?holding{m=MiniPlayer召唤棒} ?!crouching
+  - skill{s=MiniSummon} @self ~onRightclick ?holding{m=MiniPlayer召唤棒} ?!crouching
+  - skill{s=MiniRevoke} @target ~onAttack ?holding{m=MiniPlayer召唤棒} ?crouching
+shit:
+  Id: cocoa_beans
+  Display: '<#B8860B>shit'
+  Lore:
+  - '💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩'
+  - '💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩'
+  - '💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩'
+  - '💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩'
+  - '💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩'
+  Skills:
+  - effect:itemspray{item=eatable_shit;amount=20;velocity=2;d=100;repeat=2;repeati=4} @self ~onUse ?holding{m=shit}
+  - effect:sound{s=entity.generic.explode;v=1;p=0.8} @self ~onUse ?holding{m=shit}
+  - effect:particles{p=dust;color=#B8860B;a=100;speed=2;hs=2;vs=2;repeat=2;repeati=4} @self ~onUse ?holding{m=shit}
+  - effect:particles{p=Explosion_Emitter;a=2} @self ~onUse ?holding{m=shit}
+  - fakeexplosion @self ~onUse ?holding{m=shit}
+  - damage{a=1} @PIR{r=3} ~onUse ?holding{m=shit}
+  - potion{type=NAUSEA;duration=60;level=1} @PIR{r=4} ~onUse ?holding{m=shit}
+eatable_shit:
+  Id: dried_kelp
+  Display: '&4shit'
+  Model: 9226
+  Lore:
+  - '💩💩💩💩💩💩💩💩💩💩💩💩💩💩💩'
+  Skills:
+  - skill{s=shit_eat} @self ~onConsume
+  - skill{s=shit_launch} @forward{forward=100} ~onUse ?holding{m=eatable_shit} ?crouching
+  # - fakeexplosion @self ~onConsume
+  # - effect:particles{p=Explosion_Emitter;a=1} @self ~onConsume
+  # - effect:itemspray{item=eatable_shit;amount=5;velocity=1.5;d=100;repeat=2;repeati=4} @self ~onConsume
+  # - effect:sound{s=entity.player.burp} ~onConsume @self
+shit_c4:
+  Id: brown_wool
+  Display: "&4危险的&6装填💩的&4c4"
+  Lore:
+  - "&4💩炸弹💩已安放"
+  - "-------------------------------------------"
+  - "&3类型:&6消耗品 右键使用 如果使用后不及时跑路的话……   哼哼哼啊啊啊啊啊啊啊啊啊"
+  - "&3获得途径：&3合成"
+  - "-------------------------------------------"
+  - "&8<💩💩💩系列>"
+  Recipes:
+    SHAPED:
+      Type: SHAPED
+      Amount: 1
+      Ingredients:
+      - eatable_shit | eatable_shit | eatable_shit
+      - eatable_shit | c4 | eatable_shit
+      - eatable_shit | eatable_shit | eatable_shit
+  Skills:
+  - summon{mob=shit_C4} @self ~onUse
+  - takeitem{i=shit_c4} @self ~onUse

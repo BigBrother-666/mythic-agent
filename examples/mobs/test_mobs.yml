@@ -1,0 +1,10 @@
+跟踪导弹装置:
+  Type: ARMOR_STAND
+  Skills:
+  - skill{s=跟踪导弹_发射} ~onTimer:40 @PlayersInRadius{r=100} # @NearestPlayer{radius=80}
+  Options:
+    Despawn: PERSISTENT
+    Marker: true
+    Invisible: true
+  KillMessages:
+  - '&f<target.name> 被 &6新赫洛堡高精度地对空导弹 &f击落'

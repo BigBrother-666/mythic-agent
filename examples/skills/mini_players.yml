@@ -1,0 +1,142 @@
+MiniSelect:
+  Skills:
+  - setvariable{var=caster.miniselect;scope=caster;value="MiniSasa";type=STRING;save=false} ?!variableIsSet{var=caster.miniselect}
+  - switch{condition=varEquals{var=caster.miniselect;v=<case>};cases=
+    case "MiniSasa"=[ 
+    - setvariable{var=caster.miniselect;scope=caster;value="MiniJieZ";save=false;type=STRING} 
+    ]
+    case "MiniJieZ"=[ 
+    - setvariable{var=caster.miniselect;scope=caster;value="MiniMutuan";save=false;type=STRING} 
+    ]
+    case "MiniMutuan"=[ 
+    - setvariable{var=caster.miniselect;scope=caster;value="MiniRLS";save=false;type=STRING} 
+    ]
+    case "MiniRLS"=[ 
+    - setvariable{var=caster.miniselect;scope=caster;value="MiniSasa";save=false;type=STRING} 
+    ]
+   } @self
+  - actionmessage{m="选择：<caster.var.miniselect>"}
+
+MiniSummon:
+  Skills:
+  - summon{type=<caster.var.miniselect>}
+  - setowner
+
+MiniRevoke:
+  Skills:
+  - remove
+  TargetConditions:
+  - varequals{var=target.miniflag;val="mini"}
+
+# =================================================================================
+
+# 突进
+Rush:
+  Skills:
+  - dismount
+  - propel{v=3.5} @Target
+
+NormalCombo:
+  Skills:
+  - propel{v=2} @Target ?onGround
+  - CancelEvent
+  - damage{a=3;preventimmunity=true;repeat=5;repeatinterval=1;ignorearmor=true} @EntitiesInRadius{r=2;target=monsters}
+  - damage{a=5;preventimmunity=true;repeat=5;repeatinterval=1;ignorearmor=true} @target
+  - particle{p=sweep_attack;amount=5;hSpread=1;vSpread=1;repeat=5;repeatinterval=2} @selfLocation
+  - sound{s=entity.player.attack.sweep;v=1;p=1.2} @selfLocation
+
+AerialCombo:
+  Cooldown: 5
+  Skills:
+  - CancelEvent
+  # 丢出敌人
+  - throw{velocity=4.5;velocityY=30} @Target
+  - sound{s=entity.ender_dragon.flap;v=1;p=1} @self
+  - particle{p=cloud;amount=20;hSpread=1;vSpread=1} @Target
+  - delay 3
+  # 基础伤害
+  - damage{a=15} @Target
+  - delay 9
+  # 冲向敌人
+  - particle{p=cloud;amount=5;hSpread=0.8;vSpread=2;repeat=10;repeatinterval=1} @self
+  - propel{v=3.5} @Target
+  - delay 5
+  # 造成连续伤害
+  - damage{a=3;i=false;preventimmunity=true;repeat=20;repeatinterval=1;preventknockback=true} @Target
+  - particle{p=sweep_attack;amount=5;hSpread=1;vSpread=1;repeat=10;repeatinterval=2} @Target
+  - sound{s=entity.player.attack.sweep;v=1;p=1.2} @Self
+  - delay 25
+  # 砸向地面
+  - propel{v=7} @Target
+  - throw{velocityY=-45} @Target
+  - particle{p=flame;a=50;hs=1;vs=3;repeat=30;repeatinterval=1} @self ?!onGround
+  TargetConditions:
+  - health{h=>30}
+
+GroundExplosion:
+  Skills:
+  # 落地爆炸
+  - CancelEvent
+  - throw{velocity=30;velocityY=15}
+  - damage{a=35;i=false}
+  - fakeexplosion @self
+  - particle{p=Explosion_Emitter;a=3;hs=1;vs=1} @self
+  - blockwave{duration=40;radius=5;radiusY=5;velocity=3;shape=sphere;hs=false} @selflocation
+  - damagepercent{percent=0.1}
+  - particle{p=explosion_large;amount=20;hSpread=2;vSpread=2} @self
+  - particle{p=smoke_large;amount=30;hSpread=2;vSpread=2} @self
+  - particlesphere{particle=lava;amount=1000;radius=7;hs=1} @selflocation{y=2}
+  Conditions:
+  - damagecause{cause=FALL}
+  - incombat
+
+# =================================================================================
+
+Lightning:
+  Cooldown: 10
+  Skills:
+  - cancelEvent
+  - setNoDamageTicks{ticks=150}
+  - skybox{s=1} @PIR{r=50}
+  # 振飞附近敌人
+  - lightning @selfLocation
+  - damage{a=10;preventimmunity=true}
+  - fakeexplosion @self
+  - particle{p=Explosion_Emitter;a=3;hs=1;vs=1} @self
+  - throw{velocityY=25;velocity=25}
+  - delay 10
+  - jump{velocity=15}
+  - delay 10
+  - particleline{p=Electric_Spark;amount=1;repeat=37;repeatinterval=2}
+  - stun{d=80} @EntitiesInRadius{r=50;target=monsters;conditions=[  - onGround false ]}
+  - stun{d=85} @self
+
+  # 召唤闪电
+  - lightning{repeat=25;repeatinterval=3}
+  - damage{a=2;i=false;preventimmunity=true;repeat=25;repeatinterval=3}
+  
+  - delay 75
+  
+  # 爆炸
+  - fakeexplosion @EntitiesInRadius{r=50;target=monsters;conditions=[  - onGround false ]}
+  - damage{a=50;i=false}
+  - particle{p=Explosion_Emitter;a=2;hs=1;vs=1} @EntitiesInRadius{r=50;target=monsters;conditions=[  - onGround false ]}
+  - throw{velocityY=-25;velocity=3}
+
+  # 结束
+  - skybox{s=0} @PIR{r=50}
+
+LightingAttack:
+  Skills:
+  - particle{p=Electric_Spark;amount=5;hSpread=1;vSpread=1;repeat=5;repeatinterval=2} @selfLocation
+  - propel{v=2}
+  - CancelEvent
+  - delay 5
+  - lightning{damage=20}
+
+ImmuneLighting:
+  Skills:
+  - CancelEvent 
+  Conditions:
+  - damagecause{cause=FALL} || damagecause{damagecause=FIRE_TICK} || damagecause{damagecause=LIGHTNING} || damagecause{damagecause=FIRE}
+
