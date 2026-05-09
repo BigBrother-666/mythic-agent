@@ -87,7 +87,7 @@ targeter / condition / trigger 7 类，中英混合。`eval/run_eval.py` 跑出 
 # 按 .env 当前设置跑一次
 docker compose exec fastapi python -m eval.run_eval
 # 或 不使用容器 本地跑
-fastapi python -m eval.run_eval
+python -m eval.run_eval
 
 # rerank开关对比
 docker compose exec fastapi python -m eval.run_eval --toggle-rerank
