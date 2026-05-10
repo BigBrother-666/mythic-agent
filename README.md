@@ -27,12 +27,25 @@ git clone https://git.lumine.io/mythiccraft/mythiccrucible.wiki.git
 
 cp .env.example .env
 # 编辑 .env，配置api key、embedding模型等环境变量
+
+# CPU 部署
 docker compose up -d --build
-# 等 milvus healthy（首次约 30s）
+
+# GPU 部署
+# 默认 CUDA 12.9 wheel；
+docker compose -f docker-compose.yml -f docker-compose.cuda.yml up -d --build
+
+# 等 milvus healthy
 docker compose exec fastapi python -m scripts.ingest --drop --examples ./examples
 ```
 
 打开浏览器 http://localhost:8000
+
+GPU override 会自动把 `EMBED_DEVICE` / `RERANK_DEVICE` 设为 `cuda`，无需手动改 `.env`。验证 GPU 是否生效：
+
+```bash
+docker compose exec fastapi python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else '')"
+```
 
 入库会同时覆盖三类来源，每个 chunk 带 `metadata.wiki` 标签：
 
@@ -48,7 +61,14 @@ retriever 可按 `wiki=mythicmobs|crucible|local` 过滤；缺省不过滤。
 
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate
+
+# CPU 版 torch
 pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+# 或 GPU 版（CUDA 12.9）
+pip install --extra-index-url https://download.pytorch.org/whl/cu129 -r requirements.txt
+# 用 GPU 跑 embed/rerank 时改 .env：
+EMBED_DEVICE=cuda
+RERANK_DEVICE=cuda
 
 # 在wiki目录下克隆mythicmobs和mythiccrucible wiki，用于构建向量数据库
 git clone https://git.lumine.io/mythiccraft/MythicMobs.wiki.git
