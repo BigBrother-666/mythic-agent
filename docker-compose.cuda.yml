@@ -1,0 +1,20 @@
+# GPU override：默认 CUDA 12.1 wheel
+#   docker compose -f docker-compose.yml -f docker-compose.cuda.yml up -d --build
+
+services:
+  fastapi:
+    build:
+      args:
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cu129}
+    environment:
+      EMBED_DEVICE: cuda
+      RERANK_DEVICE: cuda
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

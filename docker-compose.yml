@@ -74,6 +74,9 @@ services:
     build:
       context: .
       dockerfile: docker/fastapi/Dockerfile
+      args:
+        # CPU 默认；切 GPU 用 docker-compose.cuda.yml override（见 README）
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cpu}
     env_file:
       - .env
     environment:

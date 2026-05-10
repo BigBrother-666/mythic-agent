@@ -8,16 +8,20 @@ ENV PIP_NO_CACHE_DIR=1 \
 
 WORKDIR /build
 
+# torch wheel 源：
+#   CPU: https://download.pytorch.org/whl/cpu          (默认)
+#   GPU: https://download.pytorch.org/whl/cuxxx        (xxx对应cuda版本)
+ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential git curl && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
-# CPU 版 torch，避免拉 CUDA 大包
 # pymilvus 2.5 仍 import pkg_resources；显式装 setuptools<81（81+ 已移除 pkg_resources）
 RUN pip install --upgrade pip && \
     pip install "setuptools>=75,<81" && \
-    pip install --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+    pip install --extra-index-url ${TORCH_INDEX_URL} -r requirements.txt
 
 # ============== Stage 2: runtime ==============
 FROM python:3.12-slim AS runtime

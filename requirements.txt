@@ -25,6 +25,9 @@ rank-bm25==0.2.2
 setuptools>=75.0.0,<81.0.0
 
 # ------- Embedding model runtime -------
+# torch 走哪份 wheel 由 pip 的 --extra-index-url 决定：
+#   CPU: https://download.pytorch.org/whl/cpu
+#   GPU: https://download.pytorch.org/whl/cuxxx  (xxx为CUDA版本)
 sentence-transformers==3.3.1
 torch==2.5.1
 transformers==4.46.3
